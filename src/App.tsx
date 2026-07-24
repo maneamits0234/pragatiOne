@@ -1454,7 +1454,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
           {/* Brand */}
-          <div className="lg:col-span-2 text-center md:text-left">
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg"
@@ -1480,7 +1480,8 @@ function Footer() {
             </div>
           </div>
 
-          {/* Links */}
+          {/* Link columns — 2×2 on mobile, then side-by-side on lg */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
               title: 'Services',
@@ -1506,6 +1507,7 @@ function Footer() {
               </ul>
             </div>
           ))}
+          </div>
         </div>
 
         {/* Newsletter */}
@@ -1517,14 +1519,14 @@ function Footer() {
             <div className="text-white font-bold text-lg" style={{ fontFamily: 'Poppins' }}>Free Marketing Tips Newsletter</div>
             <div className="text-blue-300 text-sm">Join 2,000+ business owners. No spam. Unsubscribe anytime.</div>
           </div>
-          <div className="flex gap-3 w-full md:w-auto">
+          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 md:w-64 px-4 py-3 rounded-xl text-sm outline-none"
+              className="w-full sm:w-auto sm:flex-1 md:w-56 px-4 py-2.5 rounded-xl text-sm outline-none"
               style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', color: 'white' }}
             />
-            <button className="btn-primary px-5 py-3 text-sm flex-shrink-0">Subscribe</button>
+            <button className="btn-primary px-4 py-2.5 text-sm w-full sm:w-auto">Subscribe</button>
           </div>
         </div>
 
@@ -1562,7 +1564,7 @@ function FloatingButtons() {
       {/* WhatsApp */}
       <a
         href="https://wa.me/7709630163"
-        className="fixed bottom-24 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform animate-pulse-glow"
+        className="hidden md:flex fixed bottom-24 right-5 z-50 w-14 h-14 rounded-full items-center justify-center text-white shadow-lg hover:scale-110 transition-transform animate-pulse-glow"
         style={{ background: '#25D366' }}
         title="Chat on WhatsApp"
       >
@@ -1572,7 +1574,7 @@ function FloatingButtons() {
       {/* Call */}
       <a
         href="tel:+7709630163"
-        className="fixed bottom-8 right-5 z-50 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform"
+        className="hidden md:flex fixed bottom-8 right-5 z-50 w-14 h-14 rounded-full items-center justify-center text-white shadow-lg hover:scale-110 transition-transform"
         style={{ background: '#0A2342' }}
         title="Call Now"
       >
@@ -1583,7 +1585,7 @@ function FloatingButtons() {
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 left-5 z-50 w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
+          className="hidden md:flex fixed bottom-8 left-5 z-50 w-12 h-12 rounded-full items-center justify-center text-white shadow-lg hover:scale-110 transition-all"
           style={{ background: 'rgba(10,35,66,0.9)', backdropFilter: 'blur(10px)' }}
         >
           <ChevronUp size={20} />
