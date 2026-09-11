@@ -20,20 +20,20 @@
 }
 
 :root {
-  --background: #F7F9FC;
-  --foreground: #1E293B;
+  --background: #FFFFFF;
+  --foreground: #111827;
   --card: #FFFFFF;
-  --card-foreground: #1E293B;
-  --primary: #0A2342;
+  --card-foreground: #111827;
+  --primary: #16A34A; /* Green primary */
   --primary-foreground: #FFFFFF;
-  --secondary: #F7F9FC;
-  --secondary-foreground: #1E293B;
-  --muted: #EFF3F8;
-  --muted-foreground: #64748B;
-  --accent: #E63946;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #111827;
+  --muted: #F9FAFB;
+  --muted-foreground: #6B7280;
+  --accent: #22C55E;
   --accent-foreground: #FFFFFF;
-  --border: #E2E8F0;
-  --ring: #0A2342;
+  --border: #E5E7EB;
+  --ring: #16A34A;
   --radius: 12px;
 }
 
@@ -83,14 +83,14 @@ body:hover::-webkit-scrollbar-thumb { background: rgba(10,35,66,0.2); border-rad
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #E63946 0%, #FF6B7A 100%);
+  background: linear-gradient(135deg, #16A34A 0%, #22C55E 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-blue {
-  background: linear-gradient(135deg, #0A2342 0%, #1a4a8a 100%);
+  background: linear-gradient(135deg, #111827 0%, #374151 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -186,7 +186,7 @@ body:hover::-webkit-scrollbar-thumb { background: rgba(10,35,66,0.2); border-rad
 .btn-primary {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #E63946, #c62d39);
+  background: linear-gradient(135deg, #16A34A, #15803D);
   color: white;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
@@ -198,7 +198,7 @@ body:hover::-webkit-scrollbar-thumb { background: rgba(10,35,66,0.2); border-rad
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 8px 25px rgba(22, 163, 74, 0.4);
 }
 .btn-primary:active { transform: translateY(0); }
 
@@ -206,20 +206,20 @@ body:hover::-webkit-scrollbar-thumb { background: rgba(10,35,66,0.2); border-rad
   position: relative;
   overflow: hidden;
   background: transparent;
-  color: #0A2342;
+  color: #111827;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
   padding: 13px 28px;
   border-radius: 8px;
-  border: 2px solid #0A2342;
+  border: 2px solid #111827;
   cursor: pointer;
   transition: all 0.2s;
 }
 .btn-secondary:hover {
-  background: #0A2342;
+  background: #111827;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(10, 35, 66, 0.3);
+  box-shadow: 0 8px 25px rgba(17, 24, 39, 0.3);
 }
 
 /* Noise texture overlay */

@@ -46,9 +46,11 @@ function useCounter(target: number, duration = 2000, start = false) {
 }
 
 // ─── Navbar ────────────────────────────────────────────────────────────
+// ─── Navbar ────────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50)
@@ -56,22 +58,43 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
-  const links = ['Home', 'Services', 'Industries', 'Results', 'About', 'Blog', 'Contact']
-
   const scrollTo = (id: string) => {
     setOpen(false)
+    setActiveDropdown(null)
     const el = document.getElementById(id.toLowerCase())
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const navItems = [
+    { label: 'Home', id: 'home' },
+    {
+      label: 'Company',
+      dropdown: [
+        { label: 'About Us', id: 'about' },
+        { label: 'Why Choose Us', id: 'why-us' },
+        { label: 'Industries', id: 'industries' }
+      ]
+    },
+    {
+      label: 'Services',
+      dropdown: [
+        { label: 'Digital Marketing', id: 'services' },
+        { label: 'SEO & Google Ads', id: 'services' },
+        { label: 'AI Automation', id: 'services' },
+        { label: 'Website Development', id: 'services' }
+      ]
+    },
+    { label: 'Results', id: 'results' },
+    { label: 'Blog', id: 'blog' },
+    { label: 'Contact', id: 'contact' }
+  ]
+
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white"
       style={{
-        background: scrolled ? 'rgba(255,255,255,0.95)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(10,35,66,0.08)' : 'none',
-        boxShadow: scrolled ? '0 4px 24px rgba(10,35,66,0.08)' : 'none',
+        boxShadow: scrolled ? '0 4px 20px rgba(0,0,0,0.05)' : 'none',
+        borderBottom: scrolled ? 'none' : '1px solid #f1f5f9',
       }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -79,32 +102,49 @@ function Navbar() {
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo('home')}>
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg"
-            style={{ background: 'linear-gradient(135deg, #0A2342, #1a4a8a)' }}
+            style={{ background: 'linear-gradient(135deg, #16A34A, #15803D)' }}
           >P</div>
-          <div>
-            <div
-              className="font-bold text-xl leading-none"
-              style={{ fontFamily: 'Poppins, sans-serif', color: scrolled ? '#0A2342' : 'white' }}
-            >PragatiOne</div>
-            <div
-              className="text-xs leading-none mt-0.5"
-              style={{ color: scrolled ? '#64748B' : 'rgba(255,255,255,0.7)' }}
-            >Digital Growth Agency</div>
+          <div className="font-bold text-xl leading-none text-gray-900" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            PragatiOne
           </div>
         </div>
 
         {/* Desktop Links */}
-        <ul className="hidden lg:flex items-center gap-1">
-          {links.map((l) => (
-            <li key={l}>
+        <ul className="hidden lg:flex items-center gap-6">
+          {navItems.map((item) => (
+            <li
+              key={item.label}
+              className="relative group"
+              onMouseEnter={() => setActiveDropdown(item.label)}
+              onMouseLeave={() => setActiveDropdown(null)}
+            >
               <button
-                onClick={() => scrollTo(l === 'Results' ? 'results' : l)}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/10"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  color: scrolled ? '#1E293B' : 'rgba(255,255,255,0.9)',
-                }}
-              >{l}</button>
+                onClick={() => item.id ? scrollTo(item.id) : null}
+                className="flex items-center gap-1 py-2 text-sm font-semibold text-gray-700 hover:text-green-600 transition-colors"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                {item.label}
+                {item.dropdown && <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />}
+              </button>
+
+              {/* Dropdown Menu */}
+              {item.dropdown && (
+                <div
+                  className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transition-all duration-200 origin-top-left ${activeDropdown === item.label ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
+                >
+                  <div className="py-2">
+                    {item.dropdown.map((drop) => (
+                      <button
+                        key={drop.label}
+                        onClick={() => scrollTo(drop.id)}
+                        className="w-full text-left px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-green-600 hover:bg-green-50 transition-colors"
+                      >
+                        {drop.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -112,25 +152,17 @@ function Navbar() {
         {/* CTA */}
         <div className="hidden lg:flex items-center gap-3">
           <a
-            href="tel:+7709630163"
-            className="flex items-center gap-2 text-sm font-semibold transition-all"
-            style={{ color: scrolled ? '#0A2342' : 'white', fontFamily: 'Inter' }}
-          >
-            <Phone size={16} />
-          </a>
-          <a
-            href="https://wa.me/7709630163?text=Hi%20PragatiOne%2C%20I%20would%20like%20to%20book%20a%20free%20consultation."
+            href="https://wa.me/7709630163"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary text-sm px-5 py-2.5"
-          >Book Free Consultation</a>
+            className="btn-primary text-sm px-6 py-2.5 rounded-full"
+          >Consult Now</a>
         </div>
 
         {/* Mobile Menu Toggle */}
         <button
           onClick={() => setOpen(!open)}
-          className="lg:hidden p-2 rounded-lg"
-          style={{ color: scrolled ? '#0A2342' : 'white' }}
+          className="lg:hidden p-2 rounded-lg text-gray-800"
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -138,35 +170,57 @@ function Navbar() {
 
       {/* Mobile Drawer */}
       <div
-        className="lg:hidden transition-all duration-300 overflow-hidden"
+        className="lg:hidden transition-all duration-300 overflow-hidden bg-white"
         style={{
-          maxHeight: open ? '600px' : '0',
-          background: 'rgba(255,255,255,0.98)',
-          backdropFilter: 'blur(20px)',
+          maxHeight: open ? '1000px' : '0',
+          boxShadow: open ? '0 10px 20px rgba(0,0,0,0.05)' : 'none',
         }}
       >
-        <div className="px-6 py-4 flex flex-col gap-2">
-          {links.map((l) => (
-            <button
-              key={l}
-              onClick={() => scrollTo(l === 'Results' ? 'results' : l)}
-              className="text-left px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-            >{l}</button>
+        <div className="px-6 py-4 flex flex-col gap-1 border-t border-gray-100">
+          {navItems.map((item) => (
+            <div key={item.label}>
+              <button
+                onClick={() => {
+                  if (item.dropdown) {
+                    setActiveDropdown(activeDropdown === item.label ? null : item.label)
+                  } else if (item.id) {
+                    scrollTo(item.id)
+                  }
+                }}
+                className="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-gray-800 hover:bg-gray-50 flex items-center justify-between"
+              >
+                {item.label}
+                {item.dropdown && <ChevronDown size={16} className={`transition-transform duration-200 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />}
+              </button>
+
+              {/* Mobile Dropdown */}
+              {item.dropdown && (
+                <div
+                  className="overflow-hidden transition-all duration-300"
+                  style={{ maxHeight: activeDropdown === item.label ? '200px' : '0' }}
+                >
+                  <div className="pl-8 pr-4 py-2 flex flex-col gap-1">
+                    {item.dropdown.map((drop) => (
+                      <button
+                        key={drop.label}
+                        onClick={() => scrollTo(drop.id)}
+                        className="text-left py-2 text-sm font-medium text-gray-600"
+                      >
+                        {drop.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
-          <div className="mt-2 flex gap-3">
-            <a
-              href="https://wa.me/7709630163?text=Hi%20PragatiOne%2C%20I%20would%20like%20to%20book%20a%20free%20consultation."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary flex-1 text-sm py-3 flex items-center justify-center"
-            >Book Free Consultation</a>
+          <div className="mt-4 flex gap-3 pb-4">
             <a
               href="https://wa.me/7709630163"
-              className="flex items-center justify-center gap-2 flex-1 py-3 rounded-lg text-sm font-semibold transition-all"
-              style={{ background: '#25D366', color: 'white' }}
-            >
-              <MessageCircle size={16} /> WhatsApp
-            </a>
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary w-full text-center text-sm py-3 rounded-xl"
+            >Consult Now</a>
           </div>
         </div>
       </div>
@@ -179,170 +233,54 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #0A2342 0%, #0d2d58 40%, #112f5e 60%, #0A2342 100%)' }}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white pt-24"
     >
-      {/* Mesh background */}
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          backgroundImage: `radial-gradient(ellipse at 20% 50%, #1a4a8a 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, #E63946 0%, transparent 40%),
-            radial-gradient(ellipse at 60% 80%, #1e3a6e 0%, transparent 50%)`,
-        }}
-      />
-
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)`,
-          backgroundSize: '64px 64px',
-        }}
-      />
-
-      {/* Floating elements */}
-      <div className="absolute top-32 right-[8%] animate-float hidden xl:block">
-        <div className="glass rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center">
-            <TrendingUp size={20} className="text-white" />
-          </div>
-          <div>
-            <div className="text-white text-xs font-medium">Monthly Revenue</div>
-            <div className="text-green-400 font-bold text-sm">+247% Growth</div>
-          </div>
-        </div>
+      {/* Background glowing dots similar to Digisahyadri */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 right-[15%] w-3 h-3 bg-green-400 rounded-full opacity-50 blur-[2px]" />
+        <div className="absolute top-[35%] right-[25%] w-2 h-2 bg-green-300 rounded-full opacity-60 blur-[1px]" />
+        <div className="absolute bottom-1/3 right-[10%] w-4 h-4 bg-green-200 rounded-full opacity-70 blur-[2px]" />
+        <div className="absolute bottom-1/4 right-[30%] w-2 h-2 bg-green-400 rounded-full opacity-50 blur-[1px]" />
+        <div className="absolute top-1/3 left-[15%] w-2 h-2 bg-green-300 rounded-full opacity-40 blur-[1px]" />
       </div>
 
-      <div className="absolute top-64 right-[12%] animate-float2 hidden xl:block" style={{ animationDelay: '1s' }}>
-        <div className="glass rounded-2xl p-3 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-blue-400 flex items-center justify-center">
-            <Users size={16} className="text-white" />
-          </div>
+      {/* Large green circle accent */}
+      <div className="absolute right-[-5%] lg:right-[5%] top-1/2 -translate-y-1/2 w-[300px] h-[300px] lg:w-[600px] lg:h-[600px] rounded-full border-[8px] border-green-100 opacity-60 pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-6 w-full z-10">
+
+        <h1
+          className="text-gray-900 leading-tight mb-16 max-w-5xl"
+          style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(2.5rem, 5vw, 4.8rem)' }}
+        >
+          <span className="font-light">Hello! We're </span>
+          <span className="font-black italic text-gray-900">PragatiOne</span>
+          <br />
+          <span className="font-light">Your </span>
+          <span className="font-black italic text-gray-900">Revolutionary </span>
+          <span className="font-light">Growth Partner.</span>
+        </h1>
+
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
           <div>
-            <div className="text-white text-xs">New Leads Today</div>
-            <div className="text-blue-300 font-bold text-sm">+38 Leads</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute bottom-40 right-[6%] animate-float hidden xl:block" style={{ animationDelay: '2s' }}>
-        <div className="glass rounded-2xl p-3 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: '#E63946' }}>
-            <Star size={16} className="text-white" fill="white" />
-          </div>
-          <div>
-            <div className="text-white text-xs">Google Rating</div>
-            <div className="text-yellow-400 font-bold text-sm">★★★★★ 5.0</div>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-6 pt-28 pb-20 grid lg:grid-cols-2 gap-16 items-center">
-        <div>
-          {/* Marathi subheading */}
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-6"
-            style={{ background: 'rgba(230,57,70,0.15)', border: '1px solid rgba(230,57,70,0.3)' }}
-          >
-            <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-            <span className="text-red-300 font-medium">Want to grow your business? Start with the right strategy.</span>
+            <div className="w-24 h-1 bg-gray-900 mb-8" />
+            <p className="text-green-600 text-3xl font-semibold leading-snug">
+              Where ambition turns <br />into extraordinary <br />growth.
+            </p>
           </div>
 
-          <h1
-            className="text-white leading-tight mb-6"
-            style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(2.8rem, 5vw, 4.5rem)', fontWeight: 900 }}
-          >
-            Grow Business.<br />
-            Increase Profit.<br />
-            <span className="gradient-text">Build Brand.</span><br />
-            Scale Faster.
-          </h1>
-
-          <p className="text-blue-100 text-lg mb-10 leading-relaxed max-w-xl">
-            We help businesses grow through Digital Marketing, Branding, Websites, AI Automation and Business Strategy.
-            <span className="block mt-2 text-blue-200 text-base">Take your business to the next level.</span>
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <a
-              href="https://wa.me/7709630163?text=Hi%20PragatiOne%2C%20I%20would%20like%20to%20book%20a%20free%20strategy%20call."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary flex items-center gap-2 text-base px-8 py-4"
-            >
-              <Phone size={18} /> Book Free Strategy Call
-            </a>
-            <a
-              href="https://wa.me/7709630163"
-              className="flex items-center gap-2 px-8 py-4 rounded-lg font-semibold text-base transition-all"
-              style={{ background: '#25D366', color: 'white', fontFamily: 'Poppins' }}
-            >
-              <MessageCircle size={18} /> WhatsApp Now
-            </a>
-          </div>
-
-          {/* Trust signals */}
-          <div className="mt-12 flex flex-wrap items-center gap-6">
-            {[
-              { n: '100+', label: 'Businesses' },
-              { n: '5★', label: 'Google Rating' },
-              { n: '₹10Cr+', label: 'Revenue Generated' },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="text-white font-bold text-xl" style={{ fontFamily: 'Poppins' }}>{s.n}</div>
-                <div className="text-blue-300 text-sm">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Hero Visual */}
-        <div className="relative hidden lg:block">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ height: 480 }}>
-            <img
-              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop&auto=format"
-              alt="Business growth and digital marketing team"
-              className="w-full h-full object-cover"
-              style={{ filter: 'brightness(0.85) saturate(1.1)' }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{ background: 'linear-gradient(to top, rgba(10,35,66,0.6) 0%, transparent 50%)' }}
-            />
-            {/* Graph overlay */}
-            <div className="absolute bottom-6 left-6 right-6">
-              <div className="glass rounded-2xl p-4">
-                <div className="text-white text-sm font-semibold mb-3">Business Growth After PragatiOne</div>
-                <div className="flex items-end gap-1.5 h-16">
-                  {[30, 45, 38, 60, 52, 72, 68, 88, 82, 96, 90, 100].map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-t-sm transition-all"
-                      style={{
-                        height: `${h}%`,
-                        background: i >= 6
-                          ? 'linear-gradient(to top, #E63946, #ff6b7a)'
-                          : 'rgba(255,255,255,0.25)',
-                      }}
-                    />
-                  ))}
-                </div>
-                <div className="flex justify-between mt-2 text-blue-200 text-xs">
-                  <span>Before PragatiOne</span>
-                  <span className="text-green-400 font-semibold">↑ 247% After</span>
-                </div>
-              </div>
-            </div>
+          <div className="lg:pt-6">
+            <p className="text-gray-400 text-lg leading-relaxed max-w-lg">
+              At PragatiOne, we go beyond delivering services—we build lasting partnerships that create, long-term impact.
+            </p>
           </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-        <span className="text-blue-300 text-xs">Scroll to explore</span>
-        <ChevronDown size={20} className="text-blue-300" />
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <span className="text-gray-600 text-sm font-bold tracking-[0.2em] uppercase">Scroll Down</span>
+        <ChevronDown size={24} className="text-green-500 animate-bounce mt-2" />
       </div>
     </section>
   )
@@ -367,31 +305,25 @@ function StatsStrip() {
   const c4 = useCounter(100, 2000, started)
 
   const stats = [
-    { val: c1, suffix: '+', label: 'Projects Completed', icon: <Rocket size={24} /> },
-    { val: c2, suffix: '+', label: 'Happy Clients', icon: <Users size={24} /> },
-    { val: c3, suffix: 'M+', label: 'Total Reach', icon: <Globe size={24} /> },
-    { val: c4, suffix: 'K+', label: 'Leads Generated', icon: <Target size={24} /> },
+    { val: c1, suffix: '+', label: 'Projects Completed' },
+    { val: c2, suffix: '+', label: 'Happy Clients' },
+    { val: c3, suffix: 'M+', label: 'Total Reach' },
+    { val: c4, suffix: 'K+', label: 'Leads Generated' },
   ]
 
   return (
-    <div ref={ref} className="py-16 bg-white border-y border-slate-100">
+    <div ref={ref} className="py-20 bg-white border-y border-gray-100">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
           {stats.map((s) => (
             <div key={s.label} className="text-center reveal">
               <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                style={{ background: 'linear-gradient(135deg, rgba(10,35,66,0.08), rgba(10,35,66,0.04))' }}
-              >
-                <span style={{ color: '#0A2342' }}>{s.icon}</span>
-              </div>
-              <div
-                className="text-4xl font-black mb-1"
-                style={{ fontFamily: 'Poppins', color: '#0A2342' }}
+                className="text-5xl lg:text-6xl font-black mb-4"
+                style={{ fontFamily: 'Poppins', color: '#16A34A' }}
               >
                 {s.val}{s.suffix}
               </div>
-              <div className="text-slate-500 text-sm font-medium">{s.label}</div>
+              <div className="text-gray-500 text-sm lg:text-base font-semibold uppercase tracking-wider">{s.label}</div>
             </div>
           ))}
         </div>
@@ -474,64 +406,44 @@ function WhyFail() {
 // ─── Services Section ──────────────────────────────────────────────────
 function Services() {
   const services = [
-    { icon: <Globe size={28} />, title: 'Website Development', desc: 'Fast, beautiful, conversion-optimized websites that work 24/7 for your business.', color: '#0A2342' },
-    { icon: <TrendingUp size={28} />, title: 'Digital Marketing', desc: 'Full-funnel digital marketing strategies that bring real, measurable results.', color: '#1a4a8a' },
-    { icon: <Search size={28} />, title: 'SEO', desc: 'Rank on Google page 1 and attract organic traffic without paying per click.', color: '#0A2342' },
-    { icon: <Target size={28} />, title: 'Google Ads', desc: 'High-ROI Google Ads campaigns that put your business in front of ready buyers.', color: '#E63946' },
-    { icon: <Share2 size={28} />, title: 'Meta Ads', desc: 'Facebook & Instagram advertising that targets your ideal customers precisely.', color: '#E63946' },
-    { icon: <Share2 size={28} />, title: 'Social Media', desc: 'Professional social media management that builds brand and community.', color: '#1a4a8a' },
-    { icon: <Palette size={28} />, title: 'Brand Identity', desc: 'Premium logo, brand kit, and identity design that commands respect.', color: '#0A2342' },
-    { icon: <Bot size={28} />, title: 'AI Automation', desc: 'Automate lead follow-up, WhatsApp, CRM and save 20+ hours per week.', color: '#E63946' },
-    { icon: <Users size={28} />, title: 'CRM & Leads', desc: 'Set up CRM systems and lead generation pipelines that never miss a prospect.', color: '#1a4a8a' },
-    { icon: <Megaphone size={28} />, title: 'Lead Generation', desc: 'Consistent qualified leads delivered directly to your sales team every day.', color: '#0A2342' },
-    { icon: <MessageCircle size={28} />, title: 'WhatsApp Automation', desc: 'Automate your entire WhatsApp business communication and follow-ups.', color: '#25D366' },
-    { icon: <Lightbulb size={28} />, title: 'Business Consultation', desc: 'Strategic business consulting to identify growth opportunities and systems.', color: '#E63946' },
+    { title: 'Website Development', desc: 'Fast, beautiful, conversion-optimized websites that work 24/7 for your business.' },
+    { title: 'Digital Marketing', desc: 'Full-funnel digital marketing strategies that bring real, measurable results.' },
+    { title: 'SEO & Google Ads', desc: 'Rank on Google page 1 and attract organic traffic without paying per click.' },
+    { title: 'Social Media', desc: 'Professional social media management that builds brand and community.' },
+    { title: 'Brand Identity', desc: 'Premium logo, brand kit, and identity design that commands respect.' },
+    { title: 'AI Automation', desc: 'Automate lead follow-up, WhatsApp, CRM and save 20+ hours per week.' },
   ]
 
   return (
     <section id="services" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16 reveal">
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider"
-            style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-          >Our Services</div>
           <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
-            style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-          >Everything Your Business Needs<br />
-            <span className="gradient-text">to Grow Online</span>
+            className="text-4xl lg:text-5xl font-black mb-6 text-gray-900"
+            style={{ fontFamily: 'Poppins' }}
+          >
+            Our Core <span className="text-green-600 italic">Services</span>
           </h2>
-          <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-            Everything you need for business growth under one roof.
+          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+            Everything your business needs for digital growth, delivered with excellence.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((s, i) => (
             <div
               key={s.title}
-              className="card-tilt group bg-white rounded-2xl p-6 reveal cursor-pointer text-center md:text-left"
-              style={{
-                border: '1px solid #E2E8F0',
-                transitionDelay: `${i * 40}ms`,
-                boxShadow: '0 2px 20px rgba(0,0,0,0.04)',
-              }}
+              className="group bg-white rounded-2xl p-8 reveal border border-gray-100 transition-all hover:border-green-500 hover:shadow-xl hover:-translate-y-1"
+              style={{ transitionDelay: `${i * 50}ms` }}
             >
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 transition-all group-hover:scale-110 mx-auto md:mx-0"
-                style={{ background: `${s.color}12` }}
-              >
-                <span style={{ color: s.color }}>{s.icon}</span>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-green-50 group-hover:bg-green-500 transition-colors">
+                <div className="w-4 h-4 bg-green-500 group-hover:bg-white rounded-sm transition-colors" />
               </div>
-              <h3 className="font-bold text-slate-800 mb-2 text-lg" style={{ fontFamily: 'Poppins' }}>{s.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mb-4">{s.desc}</p>
-              <div
-                className="flex items-center justify-center md:justify-start gap-1 text-sm font-semibold transition-all group-hover:gap-2"
-                style={{ color: s.color }}
-              >
-                Learn More <ArrowRight size={14} />
-              </div>
+              <h3 className="font-bold text-gray-900 mb-3 text-xl" style={{ fontFamily: 'Poppins' }}>{s.title}</h3>
+              <p className="text-gray-500 text-sm leading-relaxed mb-6">{s.desc}</p>
+              <button className="flex items-center gap-2 text-sm font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
+                Learn More <ArrowRight size={16} />
+              </button>
             </div>
           ))}
         </div>
@@ -630,7 +542,6 @@ function AISection() {
     { icon: <MessageCircle size={20} />, title: 'WhatsApp Automation', desc: 'Auto-reply, follow-ups, order confirmations on WhatsApp.' },
     { icon: <Users size={20} />, title: 'CRM Integration', desc: 'Capture every lead automatically in your CRM.' },
     { icon: <Zap size={20} />, title: 'Lead Follow-up', desc: 'Never miss a lead — automated nurturing sequences.' },
-    { icon: <BarChart3 size={20} />, title: 'Invoicing & Reports', desc: 'Auto-generate invoices and business reports.' },
     { icon: <Bot size={20} />, title: 'AI Customer Support', desc: '24/7 AI chatbot that handles customer queries.' },
     { icon: <Clock size={20} />, title: 'Save 20+ Hours/Week', desc: 'Eliminate repetitive tasks from your workflow.' },
   ]
@@ -790,390 +701,42 @@ function Industries() {
 }
 
 // ─── Case Studies / Results ────────────────────────────────────────────
-function Results() {
-  const cases = [
-    {
-      industry: 'Manufacturing',
-      company: 'Precision Parts Pvt Ltd',
-      location: 'Pune, Maharashtra',
-      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop&auto=format',
-      before: { leads: '3/month', revenue: '₹18L/month', traffic: '120 visits' },
-      after: { leads: '45/month', revenue: '₹52L/month', traffic: '3,800 visits' },
-      result: '+1400% more leads in 6 months',
-      services: ['Website', 'SEO', 'Google Ads', 'LinkedIn'],
-    },
-    {
-      industry: 'Healthcare',
-      company: 'Dr. Sharma Dental Clinic',
-      location: 'Nashik, Maharashtra',
-      image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600&h=400&fit=crop&auto=format',
-      before: { leads: '8/month', revenue: '₹2.5L/month', traffic: '300 visits' },
-      after: { leads: '72/month', revenue: '₹9.8L/month', traffic: '12,000 visits' },
-      result: '9x appointment growth in 4 months',
-      services: ['Website', 'Google Ads', 'Meta Ads', 'SEO'],
-    },
-    {
-      industry: 'Retail',
-      company: 'FreshMart Superstore',
-      location: 'Aurangabad, Maharashtra',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&auto=format',
-      before: { leads: '20/month', revenue: '₹8L/month', traffic: '500 visits' },
-      after: { leads: '180/month', revenue: '₹28L/month', traffic: '22,000 visits' },
-      result: '+250% revenue in 3 months',
-      services: ['Meta Ads', 'WhatsApp', 'Branding', 'Social Media'],
-    },
-  ]
-
-  return (
-    <section id="results" className="py-24 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16 reveal">
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider"
-            style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-          >Success Stories</div>
-          <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
-            style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-          >Real Results for<br />
-            <span className="gradient-text">Real Businesses</span>
-          </h2>
-          <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            Success Stories — Exactly how much growth our clients experienced.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-7">
-          {cases.map((c, i) => (
-            <div
-              key={c.company}
-              className="card-tilt bg-white rounded-3xl overflow-hidden reveal"
-              style={{
-                border: '1px solid #E2E8F0',
-                boxShadow: '0 4px 30px rgba(0,0,0,0.06)',
-                transitionDelay: `${i * 80}ms`,
-              }}
-            >
-              <div className="relative h-48 overflow-hidden">
-                <img src={c.image} alt={c.company} className="w-full h-full object-cover" />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,35,66,0.8), transparent 50%)' }} />
-                <div
-                  className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold text-white"
-                  style={{ background: '#E63946' }}
-                >{c.industry}</div>
-                <div className="absolute bottom-4 left-4">
-                  <div className="text-white font-bold" style={{ fontFamily: 'Poppins' }}>{c.company}</div>
-                  <div className="text-blue-300 text-xs flex items-center gap-1">
-                    <MapPin size={10} /> {c.location}
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <div className="grid grid-cols-2 gap-3 mb-5">
-                  {[
-                    { label: 'Before', data: c.before },
-                    { label: 'After', data: c.after },
-                  ].map((col) => (
-                    <div
-                      key={col.label}
-                      className="rounded-xl p-3"
-                      style={{ background: col.label === 'After' ? 'rgba(46,125,50,0.06)' : 'rgba(100,116,139,0.06)' }}
-                    >
-                      <div
-                        className="text-xs font-bold uppercase tracking-wider mb-2"
-                        style={{ color: col.label === 'After' ? '#2E7D32' : '#94a3b8' }}
-                      >{col.label}</div>
-                      {Object.entries(col.data).map(([k, v]) => (
-                        <div key={k} className="text-sm font-semibold text-slate-700">{v}</div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-
-                <div
-                  className="flex items-center gap-2 p-3 rounded-xl mb-4"
-                  style={{ background: 'rgba(46,125,50,0.06)', border: '1px solid rgba(46,125,50,0.15)' }}
-                >
-                  <TrendingUp size={16} className="text-green-600" />
-                  <span className="text-green-700 font-bold text-sm">{c.result}</span>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5">
-                  {c.services.map((s) => (
-                    <span
-                      key={s}
-                      className="px-2 py-0.5 rounded-full text-xs font-medium"
-                      style={{ background: 'rgba(10,35,66,0.07)', color: '#0A2342' }}
-                    >{s}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
 
 // ─── Why Choose Us ─────────────────────────────────────────────────────
 function WhyUs() {
   const points = [
-    { icon: <Shield size={24} />, title: 'Transparent Process', desc: 'Complete visibility into every step of our work. No hidden costs, no surprises.' },
-    { icon: <BarChart3 size={24} />, title: 'Data Driven', desc: 'Every decision backed by data and analytics. We optimize based on numbers.' },
-    { icon: <TrendingUp size={24} />, title: 'ROI Focused', desc: 'We measure success by your revenue growth, not vanity metrics.' },
-    { icon: <Palette size={24} />, title: 'Creative Team', desc: 'Award-winning creative work that differentiates your brand in the market.' },
-    { icon: <Award size={24} />, title: 'Experienced Experts', desc: '5+ year experienced specialists in each domain under one roof.' },
-    { icon: <Clock size={24} />, title: 'Dedicated Support', desc: 'WhatsApp-first support with 4-hour response guarantee.' },
-    { icon: <DollarSign size={24} />, title: 'Affordable Pricing', desc: 'Enterprise-quality results at pricing that makes sense for Indian SMBs.' },
-    { icon: <Bot size={24} />, title: 'Modern Technology', desc: 'We use the latest AI tools and platforms for maximum efficiency.' },
+    { title: 'Transparent Process', desc: 'Complete visibility into every step of our work. No hidden costs, no surprises.' },
+    { title: 'Data Driven', desc: 'Every decision backed by data and analytics. We optimize based on numbers.' },
+    { title: 'ROI Focused', desc: 'We measure success by your revenue growth, not vanity metrics.' },
+    { title: 'Creative Team', desc: 'Award-winning creative work that differentiates your brand in the market.' },
+    { title: 'Experienced Experts', desc: '5+ year experienced specialists in each domain under one roof.' },
+    { title: 'Dedicated Support', desc: 'WhatsApp-first support with 4-hour response guarantee.' },
   ]
 
   return (
     <section id="about" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="reveal-left">
-            <div
-              className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6 uppercase tracking-wider"
-              style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-            >Why Choose Us</div>
-            <h2
-              className="text-4xl lg:text-5xl font-black mb-6 leading-tight"
-              style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-            >
-              We Don't Just Deliver.<br />
-              <span className="gradient-text">We Transform.</span>
-            </h2>
-            <p className="text-slate-500 text-lg mb-4 leading-relaxed">
-              100+ businesses have trusted PragatiOne to build their digital presence, generate leads and grow revenue.
-            </p>
-            <p className="text-slate-500 mb-8">
-              Every business that has worked with us has experienced growth.
-            </p>
-            <button className="btn-primary flex items-center gap-2">
-              See Our Work <ArrowRight size={18} />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 reveal-right">
-            {points.map((p, i) => (
-              <div
-                key={p.title}
-                className="group p-5 rounded-2xl cursor-pointer transition-all duration-300 hover:shadow-lg"
-                style={{
-                  border: '1px solid #E2E8F0',
-                  transitionDelay: `${i * 50}ms`,
-                }}
-              >
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-all group-hover:scale-110"
-                  style={{ background: 'linear-gradient(135deg, rgba(10,35,66,0.1), rgba(10,35,66,0.05))' }}
-                >
-                  <span style={{ color: '#0A2342' }}>{p.icon}</span>
-                </div>
-                <div className="font-bold text-slate-800 mb-1 text-sm" style={{ fontFamily: 'Poppins' }}>{p.title}</div>
-                <div className="text-slate-500 text-xs leading-relaxed">{p.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ─── Testimonials ──────────────────────────────────────────────────────
-function Testimonials() {
-  const [active, setActive] = useState(0)
-
-  const reviews = [
-    {
-      name: 'Rajesh Patil',
-      role: 'Owner, Patil Iron Works',
-      location: 'Pune',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&auto=format',
-      text: "PragatiOne completely built our factory's digital presence. Now we get new inquiries every day from Google. Turnover doubled in 6 months!",
-      rating: 5,
-      result: '200% Revenue Growth',
-    },
-    {
-      name: 'Dr. Priya Sharma',
-      role: 'Owner, Smile Dental Clinic',
-      location: 'Nashik',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b11c?w=80&h=80&fit=crop&auto=format',
-      text: 'Before PragatiOne, I had no online presence at all. Now my clinic gets 70+ new patient appointments every month purely from Google Ads and SEO. Best investment I made.',
-      rating: 5,
-      result: '9x More Appointments',
-    },
-    {
-      name: 'Suresh Agarwal',
-      role: 'Director, AgroFresh Pvt Ltd',
-      location: 'Aurangabad',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&auto=format',
-      text: 'WhatsApp automation alone saved our team 25 hours per week. The leads come in automatically, follow-ups happen automatically. It feels like magic. Highly recommended!',
-      rating: 5,
-      result: '25 Hrs/Week Saved',
-    },
-    {
-      name: 'Sunita Mehta',
-      role: 'Founder, Mehta Fashion House',
-      location: 'Nagpur',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&auto=format',
-      text: 'Our brand identity and website look very professional now. We get ₹4-5 lakh of orders every month from Meta Ads. PragatiOne changed everything.',
-      rating: 5,
-      result: '₹4L+ Monthly Orders',
-    },
-  ]
-
-  return (
-    <section className="py-24 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16 reveal">
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider"
-            style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-          >Client Reviews</div>
+        <div className="text-center max-w-3xl mx-auto mb-16 reveal">
           <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
-            style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-          >What Our Clients Say</h2>
-          <div className="flex items-center justify-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} size={20} className="text-yellow-400" fill="#FBBF24" />
-            ))}
-            <span className="text-slate-600 ml-2 font-semibold">5.0 on Google</span>
-          </div>
-          <p className="text-slate-400 text-sm">Based on 100+ verified reviews</p>
+            className="text-4xl lg:text-5xl font-black mb-6 text-gray-900"
+            style={{ fontFamily: 'Poppins' }}
+          >
+            Why <span className="text-green-600 italic">Choose Us</span>
+          </h2>
+          <p className="text-gray-500 text-lg">
+            We don't just deliver services—we build partnerships that create long-term impact for your business.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {reviews.map((r, i) => (
-            <div
-              key={r.name}
-              className="card-tilt bg-white rounded-3xl p-7 reveal cursor-pointer"
-              style={{
-                border: '1px solid #E2E8F0',
-                boxShadow: '0 4px 30px rgba(0,0,0,0.06)',
-                transitionDelay: `${i * 80}ms`,
-              }}
-              onClick={() => setActive(i)}
-            >
-              <div className="flex items-start gap-4 mb-5">
-                <img src={r.avatar} alt={r.name} className="w-14 h-14 rounded-full object-cover flex-shrink-0" />
-                <div>
-                  <div className="font-bold text-slate-800" style={{ fontFamily: 'Poppins' }}>{r.name}</div>
-                  <div className="text-slate-500 text-sm">{r.role}</div>
-                  <div className="text-slate-400 text-xs flex items-center gap-1 mt-0.5">
-                    <MapPin size={10} /> {r.location}
-                  </div>
-                </div>
-                <div
-                  className="ml-auto px-3 py-1 rounded-full text-xs font-bold"
-                  style={{ background: 'rgba(46,125,50,0.1)', color: '#2E7D32' }}
-                >{r.result}</div>
-              </div>
-
-              <div className="flex mb-3">
-                {[...Array(r.rating)].map((_, j) => (
-                  <Star key={j} size={14} className="text-yellow-400" fill="#FBBF24" />
-                ))}
-              </div>
-
-              <Quote size={20} className="text-slate-200 mb-2" />
-              <p className="text-slate-600 leading-relaxed text-sm">{r.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ─── Blog ──────────────────────────────────────────────────────────────
-function Blog() {
-  const posts = [
-    {
-      category: 'Digital Marketing',
-      title: '10 Ways to Generate More Leads for Your Local Business in 2024',
-      excerpt: 'Discover proven lead generation strategies that are working for Indian SMBs right now.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&auto=format',
-      time: '5 min read',
-      date: 'Jan 15, 2024',
-    },
-    {
-      category: 'AI Automation',
-      title: 'How to Automate your Business with WhatsApp Automation',
-      excerpt: 'Make your business smart with the help of WhatsApp Business API and automation tools.',
-      image: 'https://images.unsplash.com/photo-1611262588024-d12430b98920?w=600&h=400&fit=crop&auto=format',
-      time: '7 min read',
-      date: 'Feb 3, 2024',
-    },
-    {
-      category: 'SEO',
-      title: 'What to do to get on Page 1 of Google — Complete SEO Guide',
-      excerpt: 'Local SEO strategies that actually work for businesses.',
-      image: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=600&h=400&fit=crop&auto=format',
-      time: '8 min read',
-      date: 'Feb 18, 2024',
-    },
-  ]
-
-  return (
-    <section id="blog" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="reveal">
-            <div
-              className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider"
-              style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-            >Blog</div>
-            <h2
-              className="text-4xl lg:text-5xl font-black"
-              style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-            >Insights & Tips<br />
-              <span className="gradient-text">for Business Growth</span>
-            </h2>
-          </div>
-          <button className="btn-secondary flex items-center gap-2 reveal">
-            View All Articles <ArrowRight size={16} />
-          </button>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-7">
-          {posts.map((p, i) => (
+        <div className="grid md:grid-cols-3 gap-8 reveal">
+          {points.map((p, i) => (
             <div
               key={p.title}
-              className="card-tilt bg-white rounded-3xl overflow-hidden cursor-pointer reveal"
-              style={{
-                border: '1px solid #E2E8F0',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                transitionDelay: `${i * 80}ms`,
-              }}
+              className="p-8 rounded-2xl bg-gray-50 border border-gray-100 transition-all hover:-translate-y-1 hover:shadow-xl"
+              style={{ transitionDelay: `${i * 100}ms` }}
             >
-              <div className="relative h-48 overflow-hidden">
-                <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                <div
-                  className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold text-white"
-                  style={{ background: '#0A2342' }}
-                >{p.category}</div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-3 text-slate-400 text-xs mb-3">
-                  <span>{p.date}</span>
-                  <span>•</span>
-                  <span>{p.time}</span>
-                </div>
-                <h3 className="font-bold text-slate-800 mb-3 leading-snug" style={{ fontFamily: 'Poppins' }}>{p.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed mb-4">{p.excerpt}</p>
-                <div
-                  className="flex items-center gap-1.5 text-sm font-semibold"
-                  style={{ color: '#0A2342' }}
-                >
-                  Read Article <ArrowRight size={14} />
-                </div>
-              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3" style={{ fontFamily: 'Poppins' }}>{p.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{p.desc}</p>
             </div>
           ))}
         </div>
@@ -1183,8 +746,15 @@ function Blog() {
 }
 
 // ─── FAQ ───────────────────────────────────────────────────────────────
-function FAQ() {
+// ─── FAQ & Contact ─────────────────────────────────────────────────────
+function FAQAndContact() {
   const [open, setOpen] = useState<number | null>(0)
+  const [form, setForm] = useState({ name: '', phone: '', email: '', business: '', message: '' })
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    alert('Thank you! We will call you within 2 hours.')
+  }
 
   const faqs = [
     {
@@ -1207,58 +777,81 @@ function FAQ() {
       q: 'Do you guarantee results?',
       a: 'We follow a performance-based approach. We track the results of every campaign, and if targets are missed, we provide free optimization. 95% of our clients renew — that is our guarantee.',
     },
-    {
-      q: 'How do I get started with PragatiOne?',
-      a: 'Simply book a free 30-minute strategy call. We will analyze your business, competitors, and current digital presence, then recommend a clear roadmap for growth. No obligations, no sales pressure — just honest advice.',
-    },
   ]
 
   return (
-    <section className="py-24 bg-slate-50">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-16 reveal">
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider"
-            style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-          >FAQ</div>
-          <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
-            style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-          >Got Questions?<br />
-            <span className="gradient-text">We Have Answers.</span>
-          </h2>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          {faqs.map((f, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl overflow-hidden reveal"
-              style={{ border: '1px solid #E2E8F0', transitionDelay: `${i * 60}ms` }}
-            >
-              <button
-                className="w-full flex items-center justify-between p-6 text-left"
-                onClick={() => setOpen(open === i ? null : i)}
-              >
-                <span className="font-semibold text-slate-800 pr-4" style={{ fontFamily: 'Poppins' }}>{f.q}</span>
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
-                  style={{ background: open === i ? '#0A2342' : 'rgba(10,35,66,0.08)' }}
-                >
-                  {open === i
-                    ? <ChevronUp size={16} className="text-white" />
-                    : <ChevronDown size={16} style={{ color: '#0A2342' }} />
-                  }
+    <section id="contact" className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* FAQ Column */}
+          <div className="reveal-left">
+            <h2 className="text-3xl lg:text-4xl font-black mb-8 text-gray-900" style={{ fontFamily: 'Poppins' }}>
+              Frequently Asked <span className="text-green-600 italic">Questions</span>
+            </h2>
+            <div className="flex flex-col gap-2">
+              {faqs.map((f, i) => (
+                <div key={i} className="border-b border-gray-100 last:border-0">
+                  <button
+                    className="w-full flex items-center justify-between py-5 text-left group"
+                    onClick={() => setOpen(open === i ? null : i)}
+                  >
+                    <span className={`font-semibold transition-colors ${open === i ? 'text-green-600' : 'text-gray-800 group-hover:text-green-600'}`} style={{ fontFamily: 'Poppins' }}>
+                      {f.q}
+                    </span>
+                    <div className="flex-shrink-0 ml-4">
+                      {open === i ? <ChevronUp size={20} className="text-green-600" /> : <ChevronDown size={20} className="text-gray-400 group-hover:text-green-600" />}
+                    </div>
+                  </button>
+                  <div
+                    className="overflow-hidden transition-all duration-300"
+                    style={{ maxHeight: open === i ? '300px' : '0' }}
+                  >
+                    <p className="pb-5 text-gray-500 leading-relaxed text-sm pr-6">{f.a}</p>
+                  </div>
                 </div>
-              </button>
-              <div
-                className="overflow-hidden transition-all duration-300"
-                style={{ maxHeight: open === i ? '300px' : '0' }}
-              >
-                <p className="px-6 pb-6 text-slate-500 leading-relaxed">{f.a}</p>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Form Column */}
+          <div className="reveal-right">
+            <div className="bg-white rounded-3xl p-8 lg:p-10 border border-gray-100 shadow-xl shadow-gray-100/50">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'Poppins' }}>
+                Book Free Strategy Call
+              </h3>
+              <p className="text-gray-500 text-sm mb-8">Connect today. Start growth tomorrow.</p>
+
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                {[
+                  { name: 'name', placeholder: 'Your Full Name *', type: 'text' },
+                  { name: 'phone', placeholder: 'WhatsApp Number *', type: 'tel' },
+                  { name: 'email', placeholder: 'Email Address', type: 'email' },
+                  { name: 'business', placeholder: 'Business Type', type: 'text' },
+                ].map((field) => (
+                  <input
+                    key={field.name}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    value={form[field.name as keyof typeof form]}
+                    onChange={(e) => setForm({ ...form, [field.name]: e.target.value })}
+                    className="w-full px-5 py-4 rounded-xl text-sm outline-none transition-all border border-gray-200 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                    style={{ fontFamily: 'Inter' }}
+                  />
+                ))}
+                <textarea
+                  placeholder="Describe your business challenge (optional)"
+                  rows={3}
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full px-5 py-4 rounded-xl text-sm outline-none resize-none transition-all border border-gray-200 focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                  style={{ fontFamily: 'Inter' }}
+                />
+                <button type="submit" className="btn-primary mt-2 flex items-center justify-center gap-2 w-full py-4 text-base rounded-xl">
+                  <Send size={18} /> Submit & Book Call
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1268,29 +861,20 @@ function FAQ() {
 // ─── CTA Banner ────────────────────────────────────────────────────────
 function CTABanner() {
   return (
-    <section
-      className="py-24 relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #0A2342 0%, #0d2d58 100%)' }}
-    >
-      <div className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: `radial-gradient(ellipse at 10% 50%, #E63946 0%, transparent 50%),
-            radial-gradient(ellipse at 90% 50%, #1a4a8a 0%, transparent 50%)`,
-        }}
-      />
+    <section className="py-24 relative overflow-hidden bg-gray-900">
+      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-green-500/30 via-transparent to-transparent" />
       <div className="relative max-w-4xl mx-auto px-6 text-center reveal">
-        <div
-          className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6 uppercase tracking-wider"
-          style={{ background: 'rgba(230,57,70,0.2)', color: '#ff8a94' }}
-        >Free Consultation</div>
+        <div className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-6 uppercase tracking-wider bg-gray-800 border border-gray-700 text-green-400">
+          Free Consultation
+        </div>
         <h2
           className="text-4xl lg:text-6xl font-black text-white mb-6 leading-tight"
           style={{ fontFamily: 'Poppins' }}
         >
           Ready to Grow?<br />
-          <span className="gradient-text">Let's Build Your Business Together.</span>
+          Let's Build Your Business Together.
         </h2>
-        <p className="text-blue-200 text-xl mb-10 max-w-2xl mx-auto">
+        <p className="text-green-100 text-xl mb-10 max-w-2xl mx-auto">
           Book a FREE 30-minute strategy call today. Our experts will create a personalized growth plan for your business.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
@@ -1298,14 +882,13 @@ function CTABanner() {
             href="https://wa.me/7709630163?text=Hi%20PragatiOne%2C%20I%20would%20like%20to%20book%20a%20free%20meeting."
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary flex items-center gap-2 text-lg px-10 py-5 animate-pulse-glow"
+            className="flex items-center gap-2 text-lg px-10 py-5 bg-green-500 text-white rounded-xl font-bold transition-all hover:-translate-y-1 hover:shadow-lg animate-pulse-glow"
           >
             <Phone size={20} /> Book Free Meeting
           </a>
           <a
             href="https://wa.me/7709630163"
-            className="flex items-center gap-2 px-10 py-5 rounded-xl font-semibold text-lg transition-all hover:-translate-y-1"
-            style={{ background: '#25D366', color: 'white', fontFamily: 'Poppins' }}
+            className="flex items-center gap-2 px-10 py-5 rounded-xl font-semibold text-lg transition-all hover:-translate-y-1 bg-green-800 text-white hover:bg-green-900"
           >
             <MessageCircle size={20} /> WhatsApp Now
           </a>
@@ -1316,156 +899,26 @@ function CTABanner() {
 }
 
 // ─── Contact ───────────────────────────────────────────────────────────
-function Contact() {
-  const [form, setForm] = useState({ name: '', phone: '', email: '', business: '', message: '' })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert('Thank you! We will call you within 2 hours.')
-  }
-
-  return (
-    <section id="contact" className="py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16 reveal">
-          <div
-            className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider"
-            style={{ background: 'rgba(10,35,66,0.08)', color: '#0A2342' }}
-          >Contact Us</div>
-          <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
-            style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-          >Let's Talk About<br />
-            <span className="gradient-text">Your Business Growth</span>
-          </h2>
-          <p className="text-slate-500 text-lg">Connect today. Start growth tomorrow.</p>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Info */}
-          <div className="reveal-left">
-            <div className="grid gap-5 mb-8">
-              {[
-                { icon: <Phone size={22} />, label: 'Call Us', val: '+91 7709630163', sub: 'Mon–Sat 9am–7pm' },
-                { icon: <MessageCircle size={22} />, label: 'WhatsApp', val: '+91 7709630163', sub: 'Chat anytime' },
-                { icon: <Mail size={22} />, label: 'Email', val: 'hello@pragatione.com', sub: 'Reply within 2 hours' },
-                { icon: <MapPin size={22} />, label: 'Office', val: 'Pune, Maharashtra', sub: 'Visit by appointment' },
-              ].map((c) => (
-                <div key={c.label} className="flex items-center gap-5 p-5 rounded-2xl" style={{ border: '1px solid #E2E8F0' }}>
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: 'linear-gradient(135deg, rgba(10,35,66,0.1), rgba(10,35,66,0.05))' }}
-                  >
-                    <span style={{ color: '#0A2342' }}>{c.icon}</span>
-                  </div>
-                  <div>
-                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wider">{c.label}</div>
-                    <div className="font-bold text-slate-800" style={{ fontFamily: 'Poppins' }}>{c.val}</div>
-                    <div className="text-slate-400 text-xs">{c.sub}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Google Map placeholder */}
-            <div
-              className="rounded-2xl overflow-hidden relative"
-              style={{ height: 220, background: '#e8edf2', border: '1px solid #E2E8F0' }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?w=700&h=300&fit=crop&auto=format"
-                alt="Pune office location"
-                className="w-full h-full object-cover opacity-60"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-white text-sm"
-                  style={{ background: '#0A2342' }}
-                >
-                  <MapPin size={16} /> View on Google Maps
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Form */}
-          <div className="reveal-right">
-            <div
-              className="bg-white rounded-3xl p-8"
-              style={{ border: '1px solid #E2E8F0', boxShadow: '0 8px 40px rgba(0,0,0,0.08)' }}
-            >
-              <h3 className="text-2xl font-bold text-slate-800 mb-6" style={{ fontFamily: 'Poppins' }}>
-                Book Free Strategy Call
-              </h3>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                {[
-                  { name: 'name', placeholder: 'Your Full Name *', type: 'text' },
-                  { name: 'phone', placeholder: 'WhatsApp Number *', type: 'tel' },
-                  { name: 'email', placeholder: 'Email Address', type: 'email' },
-                  { name: 'business', placeholder: 'Business Type (e.g. Clinic, Shop, Factory)', type: 'text' },
-                ].map((field) => (
-                  <input
-                    key={field.name}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    value={form[field.name as keyof typeof form]}
-                    onChange={(e) => setForm({ ...form, [field.name]: e.target.value })}
-                    className="w-full px-4 py-3.5 rounded-xl text-sm outline-none transition-all"
-                    style={{
-                      border: '1.5px solid #E2E8F0',
-                      fontFamily: 'Inter',
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = '#0A2342')}
-                    onBlur={(e) => (e.target.style.borderColor = '#E2E8F0')}
-                  />
-                ))}
-                <textarea
-                  placeholder="Describe your business challenge (optional)"
-                  rows={3}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full px-4 py-3.5 rounded-xl text-sm outline-none resize-none transition-all"
-                  style={{ border: '1.5px solid #E2E8F0', fontFamily: 'Inter' }}
-                  onFocus={(e) => (e.target.style.borderColor = '#0A2342')}
-                  onBlur={(e) => (e.target.style.borderColor = '#E2E8F0')}
-                />
-                <button type="submit" className="btn-primary flex items-center justify-center gap-2 w-full py-4 text-base">
-                  <Send size={18} /> Submit & Book Call
-                </button>
-                <p className="text-slate-400 text-xs text-center">
-                  We will call within 2 hours. 100% free consultation. No spam.
-                </p>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 // ─── Footer ────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer
-      className="pt-20 pb-8 relative overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #050f1e 0%, #0A2342 100%)' }}
-    >
+    <footer className="pt-20 pb-8 relative overflow-hidden bg-gray-900">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-16">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2 lg:col-span-2 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg"
-                style={{ background: 'linear-gradient(135deg, #E63946, #c62d39)' }}
-              >P</div>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-500 text-white font-bold text-lg">
+                P
+              </div>
               <div>
                 <div className="text-white font-bold text-xl" style={{ fontFamily: 'Poppins' }}>PragatiOne</div>
-                <div className="text-blue-400 text-xs">Digital Growth Agency</div>
+                <div className="text-gray-400 text-xs">Digital Growth Agency</div>
               </div>
             </div>
-            <p className="text-blue-300 text-sm leading-relaxed mb-6 max-w-xs mx-auto md:mx-0">
+            <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-xs mx-auto md:mx-0">
               The digital growth of your business is our responsibility. Website, Marketing, Branding, AI Automation — everything in one place.
             </p>
             <div className="flex justify-center md:justify-start gap-3">
@@ -1473,8 +926,7 @@ function Footer() {
                 <a
                   key={i}
                   href="#"
-                  className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 text-sm font-bold"
-                  style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.8)' }}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110 hover:-translate-y-1 text-sm font-bold bg-gray-800 text-gray-300 hover:text-white"
                 >{s}</a>
               ))}
             </div>
@@ -1482,65 +934,58 @@ function Footer() {
 
           {/* Link columns — 2×2 on mobile, then side-by-side on lg */}
           <div className="col-span-1 md:col-span-2 lg:col-span-3 grid grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            {
-              title: 'Services',
-              links: ['Website Development', 'Digital Marketing', 'SEO', 'Google Ads', 'Meta Ads', 'AI Automation'],
-            },
-            {
-              title: 'Industries',
-              links: ['Healthcare', 'Manufacturing', 'Retail', 'Restaurant', 'Education', 'Real Estate'],
-            },
-            {
-              title: 'Company',
-              links: ['About Us', 'Our Team', 'Case Studies', 'Blog', 'Careers', 'Contact'],
-            },
-          ].map((col) => (
-            <div key={col.title} className="text-center md:text-left">
-              <h4 className="text-white font-bold mb-4" style={{ fontFamily: 'Poppins' }}>{col.title}</h4>
-              <ul className="flex flex-col gap-2 items-center md:items-start">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="text-blue-300 text-sm hover:text-white transition-colors">{l}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            {[
+              {
+                title: 'Services',
+                links: ['Website Development', 'Digital Marketing', 'SEO', 'Google Ads', 'Meta Ads', 'AI Automation'],
+              },
+              {
+                title: 'Industries',
+                links: ['Healthcare', 'Manufacturing', 'Retail', 'Restaurant', 'Education', 'Real Estate'],
+              },
+              {
+                title: 'Company',
+                links: ['About Us', 'Our Team', 'Case Studies', 'Blog', 'Careers', 'Contact'],
+              },
+            ].map((col) => (
+              <div key={col.title} className="text-center md:text-left">
+                <h4 className="text-white font-bold mb-4" style={{ fontFamily: 'Poppins' }}>{col.title}</h4>
+                <ul className="flex flex-col gap-2 items-center md:items-start">
+                  {col.links.map((l) => (
+                    <li key={l}>
+                      <a href="#" className="text-gray-400 text-sm hover:text-green-400 transition-colors">{l}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Newsletter */}
-        <div
-          className="rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center gap-4 justify-between"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}
-        >
+        <div className="rounded-2xl p-6 mb-12 flex flex-col md:flex-row items-center gap-4 justify-between bg-gray-800 border border-gray-700">
           <div className="text-center md:text-left">
             <div className="text-white font-bold text-lg" style={{ fontFamily: 'Poppins' }}>Free Marketing Tips Newsletter</div>
-            <div className="text-blue-300 text-sm">Join 2,000+ business owners. No spam. Unsubscribe anytime.</div>
+            <div className="text-gray-400 text-sm">Join 2,000+ business owners. No spam. Unsubscribe anytime.</div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
             <input
               type="email"
               placeholder="Enter your email"
-              className="w-full sm:w-auto sm:flex-1 md:w-56 px-4 py-2.5 rounded-xl text-sm outline-none"
-              style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', color: 'white' }}
+              className="w-full sm:w-auto sm:flex-1 md:w-56 px-4 py-2.5 rounded-xl text-sm outline-none bg-gray-900 border border-gray-700 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500"
             />
-            <button className="btn-primary px-4 py-2.5 text-sm w-full sm:w-auto">Subscribe</button>
+            <button className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2.5 text-sm w-full sm:w-auto rounded-xl transition-colors">Subscribe</button>
           </div>
         </div>
 
         {/* Bottom */}
-        <div
-          className="flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4 pt-8 text-center md:text-left"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
-        >
-          <p className="text-blue-400 text-sm">
+        <div className="flex flex-col items-center md:flex-row md:items-center md:justify-between gap-4 pt-8 text-center md:text-left border-t border-gray-800">
+          <p className="text-gray-500 text-sm">
             © 2024 PragatiOne. All rights reserved. | Made with ❤️ in Maharashtra
           </p>
           <div className="flex gap-6">
             {['Privacy Policy', 'Terms of Service', 'Sitemap'].map((l) => (
-              <a key={l} href="#" className="text-blue-400 text-xs hover:text-white transition-colors">{l}</a>
+              <a key={l} href="#" className="text-gray-500 text-xs hover:text-white transition-colors">{l}</a>
             ))}
           </div>
         </div>
@@ -1624,19 +1069,15 @@ export default function App() {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
-      <StatsStrip />
       <WhyFail />
       <Services />
       <Framework />
       <AISection />
       <Industries />
-      <Results />
       <WhyUs />
-      <Testimonials />
-      <Blog />
-      <FAQ />
+      <StatsStrip />
+      <FAQAndContact />
       <CTABanner />
-      <Contact />
       <Footer />
       <FloatingButtons />
     </div>
