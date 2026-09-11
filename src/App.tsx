@@ -247,7 +247,7 @@ function Hero() {
             style={{ background: 'rgba(230,57,70,0.15)', border: '1px solid rgba(230,57,70,0.3)' }}
           >
             <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-            <span className="text-red-300 font-medium">व्यवसाय वाढवायचा आहे? योग्य रणनीतीने सुरुवात करा.</span>
+            <span className="text-red-300 font-medium">Want to grow your business? Start with the right strategy.</span>
           </div>
 
           <h1
@@ -262,7 +262,7 @@ function Hero() {
 
           <p className="text-blue-100 text-lg mb-10 leading-relaxed max-w-xl">
             We help businesses grow through Digital Marketing, Branding, Websites, AI Automation and Business Strategy.
-            <span className="block mt-2 text-blue-200 text-base">तुमचा व्यवसाय पुढच्या स्तरावर घेऊन जा.</span>
+            <span className="block mt-2 text-blue-200 text-base">Take your business to the next level.</span>
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -403,14 +403,14 @@ function StatsStrip() {
 // ─── Why Businesses Fail ───────────────────────────────────────────────
 function WhyFail() {
   const problems = [
-    { icon: <Palette size={22} />, text: 'No Branding', desc: 'ग्राहक ओळखत नाहीत' },
-    { icon: <Globe size={22} />, text: 'No Online Presence', desc: 'Google वर दिसत नाही' },
-    { icon: <Megaphone size={22} />, text: 'Wrong Marketing', desc: 'पैसे वाया जातात' },
-    { icon: <Target size={22} />, text: 'No Leads', desc: 'नवीन ग्राहक नाहीत' },
-    { icon: <Lightbulb size={22} />, text: 'No Strategy', desc: 'दिशा नाही' },
-    { icon: <Zap size={22} />, text: 'Manual Work', desc: 'वेळ वाया जातो' },
-    { icon: <TrendingUp size={22} />, text: 'Low Sales', desc: 'विक्री वाढत नाही' },
-    { icon: <Shield size={22} />, text: 'Poor Customer Trust', desc: 'ग्राहक विश्वास ठेवत नाहीत' },
+    { icon: <Palette size={22} />, text: 'No Branding', desc: 'Customers do not recognize you' },
+    { icon: <Globe size={22} />, text: 'No Online Presence', desc: 'Not visible on Google' },
+    { icon: <Megaphone size={22} />, text: 'Wrong Marketing', desc: 'Wasting money' },
+    { icon: <Target size={22} />, text: 'No Leads', desc: 'No new customers' },
+    { icon: <Lightbulb size={22} />, text: 'No Strategy', desc: 'No direction' },
+    { icon: <Zap size={22} />, text: 'Manual Work', desc: 'Wasting time' },
+    { icon: <TrendingUp size={22} />, text: 'Low Sales', desc: 'Sales are not growing' },
+    { icon: <Shield size={22} />, text: 'Poor Customer Trust', desc: 'Customers do not trust you' },
   ]
 
   return (
@@ -424,7 +424,7 @@ function WhyFail() {
           <h2
             className="text-4xl lg:text-5xl font-black mb-4"
             style={{ fontFamily: 'Poppins', color: '#0A2342' }}
-          >तुमचा व्यवसाय वाढत नाही का?</h2>
+          >Is your business not growing?</h2>
           <p className="text-slate-500 text-lg max-w-2xl mx-auto">
             Most businesses struggle not because of bad products — but because of these 8 critical gaps.
           </p>
@@ -503,7 +503,7 @@ function Services() {
             <span className="gradient-text">to Grow Online</span>
           </h2>
           <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-            तुमच्या व्यवसायाच्या वाढीसाठी सर्व काही एकाच छताखाली.
+            Everything you need for business growth under one roof.
           </p>
         </div>
 
@@ -574,7 +574,7 @@ function Framework() {
             style={{ fontFamily: 'Poppins' }}
           >Business Growth Framework</h2>
           <p className="text-blue-200 text-lg max-w-2xl mx-auto">
-            आमची सिद्ध 8-step प्रक्रिया जी 100+ व्यवसायांना यश मिळवून दिली आहे.
+            Our proven 8-step process that has brought success to 100+ businesses.
           </p>
         </div>
 
@@ -655,7 +655,7 @@ function AISection() {
               Let AI handle the repetitive work while you focus on growing your business.
             </p>
             <p className="text-slate-500 mb-8">
-              AI Automation वापरून तुमचा वेळ वाचवा, खर्च कमी करा आणि productivity वाढवा.
+              Save time, reduce costs, and increase productivity using AI Automation.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -758,7 +758,7 @@ function Industries() {
             <span className="gradient-text">Our Expertise.</span>
           </h2>
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            आम्ही 12+ industries मध्ये काम केले आहे. तुमचा sector माहित आहे आम्हाला.
+            We have worked in 12+ industries. We know your sector.
           </p>
         </div>
 
@@ -839,7 +839,7 @@ function Results() {
             <span className="gradient-text">Real Businesses</span>
           </h2>
           <p className="text-slate-500 text-lg max-w-xl mx-auto">
-            यशाच्या गोष्टी — आमच्या ग्राहकांनी नक्की किती वाढ अनुभवली.
+            Success Stories — Exactly how much growth our clients experienced.
           </p>
         </div>
 
@@ -950,7 +950,7 @@ function WhyUs() {
               100+ businesses have trusted PragatiOne to build their digital presence, generate leads and grow revenue.
             </p>
             <p className="text-slate-500 mb-8">
-              आमच्यासोबत काम केलेल्या प्रत्येक व्यवसायाने वाढ अनुभवली आहे.
+              Every business that has worked with us has experienced growth.
             </p>
             <button className="btn-primary flex items-center gap-2">
               See Our Work <ArrowRight size={18} />
@@ -994,7 +994,7 @@ function Testimonials() {
       role: 'Owner, Patil Iron Works',
       location: 'Pune',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&auto=format',
-      text: 'PragatiOne ने आमच्या कारखान्याची पूर्णपणे digital presence बनवली. आता Google वरून रोज नवीन inquiries येतात. 6 महिन्यात turnover दुप्पट झाला!',
+      text: "PragatiOne completely built our factory's digital presence. Now we get new inquiries every day from Google. Turnover doubled in 6 months!",
       rating: 5,
       result: '200% Revenue Growth',
     },
@@ -1021,7 +1021,7 @@ function Testimonials() {
       role: 'Founder, Mehta Fashion House',
       location: 'Nagpur',
       avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&auto=format',
-      text: 'हमारी brand identity और website बहुत professional लगती है अब. Meta Ads से हर month ₹4-5 lakh के orders आते हैं. PragatiOne ने सब कुछ बदल दिया.',
+      text: 'Our brand identity and website look very professional now. We get ₹4-5 lakh of orders every month from Meta Ads. PragatiOne changed everything.',
       rating: 5,
       result: '₹4L+ Monthly Orders',
     },
@@ -1104,16 +1104,16 @@ function Blog() {
     },
     {
       category: 'AI Automation',
-      title: 'WhatsApp Automation से अपना Business कैसे Automate करें',
-      excerpt: 'WhatsApp Business API और automation tools की मदद से business को smart बनाएं.',
+      title: 'How to Automate your Business with WhatsApp Automation',
+      excerpt: 'Make your business smart with the help of WhatsApp Business API and automation tools.',
       image: 'https://images.unsplash.com/photo-1611262588024-d12430b98920?w=600&h=400&fit=crop&auto=format',
       time: '7 min read',
       date: 'Feb 3, 2024',
     },
     {
       category: 'SEO',
-      title: 'Google वर Page 1 वर येण्यासाठी काय करावे — Complete SEO Guide',
-      excerpt: 'Local SEO strategies जे Marathi businesses साठी खरोखर काम करतात.',
+      title: 'What to do to get on Page 1 of Google — Complete SEO Guide',
+      excerpt: 'Local SEO strategies that actually work for businesses.',
       image: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=600&h=400&fit=crop&auto=format',
       time: '8 min read',
       date: 'Feb 18, 2024',
@@ -1192,8 +1192,8 @@ function FAQ() {
       a: 'Results vary by service: Google Ads and Meta Ads can generate leads within 7-14 days. SEO typically takes 3-6 months to show strong organic rankings. Website development takes 3-6 weeks for a complete build.',
     },
     {
-      q: 'Digital Marketing साठी किती budget लागतो?',
-      a: 'आमचे packages ₹15,000/month पासून सुरु होतात. तुमच्या business size, goals आणि competition नुसार आम्ही customized strategy बनवतो. Free consultation मध्ये आम्ही तुमच्यासाठी best package suggest करतो.',
+      q: 'How much budget is needed for Digital Marketing?',
+      a: 'Our packages start from ₹15,000/month. We build a customized strategy according to your business size, goals, and competition. In the free consultation, we suggest the best package for you.',
     },
     {
       q: 'Do you work with businesses outside Maharashtra?',
@@ -1204,8 +1204,8 @@ function FAQ() {
       a: 'We combine deep understanding of Indian market psychology, bilingual communication, AI-powered automation, and ROI-focused strategy. We don\'t just run campaigns — we build complete growth systems for your business.',
     },
     {
-      q: 'क्या आप guarantee देते हो results की?',
-      a: 'हम performance-based approach follow करते हैं। हम हर campaign के results track करते हैं और अगर targets miss होते हैं, तो हम free optimization करते हैं। हमारे 95% clients renewals करते हैं — यही हमारी guarantee है।',
+      q: 'Do you guarantee results?',
+      a: 'We follow a performance-based approach. We track the results of every campaign, and if targets are missed, we provide free optimization. 95% of our clients renew — that is our guarantee.',
     },
     {
       q: 'How do I get started with PragatiOne?',
@@ -1291,7 +1291,7 @@ function CTABanner() {
           <span className="gradient-text">Let's Build Your Business Together.</span>
         </h2>
         <p className="text-blue-200 text-xl mb-10 max-w-2xl mx-auto">
-          Book a FREE 30-minute strategy call today. आमचे experts तुमच्या business साठी personalized growth plan बनवतील.
+          Book a FREE 30-minute strategy call today. Our experts will create a personalized growth plan for your business.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <a
@@ -1321,7 +1321,7 @@ function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    alert('Thank you! We will call you within 2 hours. / आम्ही 2 तासात call करतो.')
+    alert('Thank you! We will call you within 2 hours.')
   }
 
   return (
@@ -1338,7 +1338,7 @@ function Contact() {
           >Let's Talk About<br />
             <span className="gradient-text">Your Business Growth</span>
           </h2>
-          <p className="text-slate-500 text-lg">आज connect करा. उद्याच growth सुरू करा.</p>
+          <p className="text-slate-500 text-lg">Connect today. Start growth tomorrow.</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -1433,7 +1433,7 @@ function Contact() {
                   <Send size={18} /> Submit & Book Call
                 </button>
                 <p className="text-slate-400 text-xs text-center">
-                  आम्ही 2 तासात call करतो. 100% free consultation. No spam.
+                  We will call within 2 hours. 100% free consultation. No spam.
                 </p>
               </form>
             </div>
@@ -1466,7 +1466,7 @@ function Footer() {
               </div>
             </div>
             <p className="text-blue-300 text-sm leading-relaxed mb-6 max-w-xs mx-auto md:mx-0">
-              तुमच्या व्यवसायाची digital growth आमची जबाबदारी. Website, Marketing, Branding, AI Automation — सर्व एकाच ठिकाणी.
+              The digital growth of your business is our responsibility. Website, Marketing, Branding, AI Automation — everything in one place.
             </p>
             <div className="flex justify-center md:justify-start gap-3">
               {['f', 'in', 'yt', 'li'].map((s, i) => (
