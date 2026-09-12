@@ -609,19 +609,19 @@ OUR RESULTS
 
 Animated Numbers
 
-500+
+50+
 
 Projects
 
-100+
+10+
 
 Happy Clients
 
-10M+
+10K+
 
 Reach
 
-100K+
+4K+
 
 Leads Generated
 

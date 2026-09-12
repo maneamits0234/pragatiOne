@@ -320,15 +320,15 @@ function StatsStrip() {
     return () => obs.disconnect()
   }, [])
 
-  const c1 = useCounter(500, 2000, started)
-  const c2 = useCounter(100, 2000, started)
+  const c1 = useCounter(20, 2000, started)
+  const c2 = useCounter(10, 2000, started)
   const c3 = useCounter(10, 2000, started)
-  const c4 = useCounter(100, 2000, started)
+  const c4 = useCounter(4, 2000, started)
 
   const stats = [
     { val: c1, suffix: '+', label: 'Projects Completed' },
     { val: c2, suffix: '+', label: 'Happy Clients' },
-    { val: c3, suffix: 'M+', label: 'Total Reach' },
+    { val: c3, suffix: 'K+', label: 'Total Reach' },
     { val: c4, suffix: 'K+', label: 'Leads Generated' },
   ]
 
