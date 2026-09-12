@@ -7,6 +7,7 @@ import {
   ShoppingBag, Utensils, GraduationCap, Heart, Car, Leaf, Plane,
   DollarSign, Factory, Home, ChevronUp, Quote, Send
 } from 'lucide-react'
+import logoImg from './assets/logo/logo.png'
 
 // ─── Scroll Reveal Hook ────────────────────────────────────────────────
 function useScrollReveal() {
@@ -100,13 +101,7 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => scrollTo('home')}>
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg"
-            style={{ background: 'linear-gradient(135deg, #16A34A, #15803D)' }}
-          >P</div>
-          <div className="font-bold text-xl leading-none text-gray-900" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            PragatiOne
-          </div>
+          <img src={logoImg} alt="PragatiOne Logo" className="h-17 object-contain" />
         </div>
 
         {/* Desktop Links */}
@@ -233,7 +228,7 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white pt-24"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white"
     >
       {/* Background glowing dots similar to Digisahyadri */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -910,13 +905,7 @@ function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2 lg:col-span-2 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-5">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-500 text-white font-bold text-lg">
-                P
-              </div>
-              <div>
-                <div className="text-white font-bold text-xl" style={{ fontFamily: 'Poppins' }}>PragatiOne</div>
-                <div className="text-gray-400 text-xs">Digital Growth Agency</div>
-              </div>
+              <img src={logoImg} alt="PragatiOne Logo" className="h-16 object-contain" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-xs mx-auto md:mx-0">
               The digital growth of your business is our responsibility. Website, Marketing, Branding, AI Automation — everything in one place.
