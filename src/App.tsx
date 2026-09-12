@@ -251,7 +251,7 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white p-3"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white p-3 pt-32 lg:pt-20"
     >
       {/* Background glowing dots similar to Digisahyadri */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -265,7 +265,7 @@ function Hero() {
       {/* Large green circle accent */}
       <div className="absolute right-[-5%] lg:right-[5%] top-1/2 -translate-y-1/2 w-[300px] h-[300px] lg:w-[600px] lg:h-[600px] rounded-full border-[8px] border-green-100 opacity-60 pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-6 w-full z-10">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full z-10 py-10 lg:p-10">
 
         <h1
           className="text-gray-900 leading-tight mb-16 max-w-5xl min-h-[220px] md:min-h-0"
