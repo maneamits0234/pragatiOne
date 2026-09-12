@@ -228,7 +228,7 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white p-2"
     >
       {/* Background glowing dots similar to Digisahyadri */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -251,9 +251,9 @@ function Hero() {
           <span className="font-light">Hello! We're </span>
           <span className="font-black italic text-gray-900">PragatiOne</span>
           <br />
-          <span className="font-light">Your </span>
-          <span className="font-black italic text-gray-900">Revolutionary </span>
-          <span className="font-light">Growth Partner.</span>
+          <span className="font-light">Your Partner for</span>
+          <span className="font-black italic text-gray-900">Extraordinary </span>
+          <span className="font-light">Growth.</span>
         </h1>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
