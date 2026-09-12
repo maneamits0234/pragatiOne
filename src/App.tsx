@@ -1033,7 +1033,7 @@ function FloatingButtons() {
 
       {/* Call */}
       <a
-        href="tel:+7709630163"
+        href="tel:+917709630163"
         className="hidden md:flex fixed bottom-8 right-5 z-50 w-14 h-14 rounded-full items-center justify-center text-white shadow-lg hover:scale-110 transition-transform"
         style={{ background: '#0A2342' }}
         title="Call Now"
@@ -1058,7 +1058,7 @@ function FloatingButtons() {
         style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(20px)', borderTop: '1px solid #E2E8F0' }}
       >
         <a
-          href="tel:+7709630163"
+          href="tel:+917709630163"
           className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all"
           style={{ background: '#0A2342', color: 'white', fontFamily: 'Poppins' }}
         >
