@@ -229,7 +229,7 @@ function Hero() {
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    const text = "for Extraordinary Growth."
+    const text = "Extraordinary Growth."
     let timeout: ReturnType<typeof setTimeout>
 
     if (!isDeleting && typedLength < text.length) {
@@ -245,9 +245,8 @@ function Hero() {
     return () => clearTimeout(timeout)
   }, [typedLength, isDeleting])
 
-  const part1 = "for ".slice(0, Math.max(0, typedLength))
-  const part2 = "Extraordinary ".slice(0, Math.max(0, typedLength - 4))
-  const part3 = "Growth.".slice(0, Math.max(0, typedLength - 18))
+  const part1 = "Extraordinary ".slice(0, Math.max(0, typedLength))
+  const part2 = "Growth.".slice(0, Math.max(0, typedLength - 14))
 
   return (
     <section
@@ -269,15 +268,17 @@ function Hero() {
       <div className="relative max-w-7xl mx-auto px-6 w-full z-10">
 
         <h1
-          className="text-gray-900 leading-tight mb-16 max-w-5xl"
+          className="text-gray-900 leading-tight mb-16 max-w-5xl min-h-[220px] md:min-h-0"
           style={{ fontFamily: 'Poppins, sans-serif', fontSize: 'clamp(2.5rem, 5vw, 4.8rem)' }}
         >
           <span className="font-light">Hello! We're </span>
           <span className="font-black italic text-gray-900">PragatiOne</span>
           <br />
-          <span className="font-light">{'Your Partner '}{part1}</span>
-          <span className="font-black italic text-gray-900">{part2}</span>
-          <span className="font-light">{part3}</span>
+          <span className="font-light">Your Partner for</span>
+          <br />
+          <span className="font-black italic text-gray-900">{part1}</span>
+          {typedLength >= 14 && <br className="block md:hidden" />}
+          <span className="font-light">{part2}</span>
           <span className="animate-pulse text-green-500 font-light">|</span>
         </h1>
 
@@ -285,7 +286,7 @@ function Hero() {
           <div>
             <div className="w-24 h-1 bg-gray-900 mb-8" />
             <p className="text-green-600 text-3xl font-semibold leading-snug">
-              Where ambition turns <br />into extraordinary <br />growth.
+              Where ambition turns <br /> into new possibilities <br /> in motion.
             </p>
           </div>
 
@@ -366,7 +367,7 @@ function WhyFail() {
   ]
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16 reveal">
           <div
