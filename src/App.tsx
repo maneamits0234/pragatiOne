@@ -225,10 +225,34 @@ function Navbar() {
 
 // ─── Hero Section ──────────────────────────────────────────────────────
 function Hero() {
+  const [typedLength, setTypedLength] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    const text = "for Extraordinary Growth."
+    let timeout: ReturnType<typeof setTimeout>
+
+    if (!isDeleting && typedLength < text.length) {
+      timeout = setTimeout(() => setTypedLength(l => l + 1), 100)
+    } else if (!isDeleting && typedLength === text.length) {
+      timeout = setTimeout(() => setIsDeleting(true), 2000)
+    } else if (isDeleting && typedLength > 0) {
+      timeout = setTimeout(() => setTypedLength(l => l - 1), 50)
+    } else if (isDeleting && typedLength === 0) {
+      timeout = setTimeout(() => setIsDeleting(false), 500)
+    }
+
+    return () => clearTimeout(timeout)
+  }, [typedLength, isDeleting])
+
+  const part1 = "for ".slice(0, Math.max(0, typedLength))
+  const part2 = "Extraordinary ".slice(0, Math.max(0, typedLength - 4))
+  const part3 = "Growth.".slice(0, Math.max(0, typedLength - 18))
+
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white p-2"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-white p-3"
     >
       {/* Background glowing dots similar to Digisahyadri */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -251,9 +275,10 @@ function Hero() {
           <span className="font-light">Hello! We're </span>
           <span className="font-black italic text-gray-900">PragatiOne</span>
           <br />
-          <span className="font-light">Your Partner for</span>
-          <span className="font-black italic text-gray-900">Extraordinary </span>
-          <span className="font-light">Growth.</span>
+          <span className="font-light">{'Your Partner '}{part1}</span>
+          <span className="font-black italic text-gray-900">{part2}</span>
+          <span className="font-light">{part3}</span>
+          <span className="animate-pulse text-green-500 font-light">|</span>
         </h1>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
